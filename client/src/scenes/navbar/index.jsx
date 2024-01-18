@@ -39,7 +39,8 @@ const NavBar = () => {
   const primaryLight = theme.palette.primary.light;
   const alt = theme.palette.background.alt;
 
-  const fullName = `${user.firstName} ${user.lastName}`;
+  // const fullName = `${user.firstName} ${user.lastName}`;
+  const fullName = "Default User"
 
   return (
     <FlexBetween padding="1rem 6%" backgroundColor={alt}>
@@ -56,7 +57,7 @@ const NavBar = () => {
         {isNonMobileScreens && (
           <FlexBetween
             backgroundColor={neutralLight}
-            borderRaidus="9px"
+            borderRadius="9px"
             gap="3rem"
             padding="0.1rem 1.5rem"
           >
