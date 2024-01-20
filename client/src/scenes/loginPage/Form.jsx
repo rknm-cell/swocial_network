@@ -1,4 +1,4 @@
-import {useState} from "react";
+import { useState } from "react";
 import {
   Box,
   Button,
@@ -19,6 +19,7 @@ import FlexBetween from "components/FlexBetween";
 const registerSchema = yup.object().shape({
   firstName: yup.string().required("First name is required"),
   lastName: yup.string().required("Last name is required"),
+  userName: yup.string().required("Username is required"),
   email: yup.string().email("Invalid email").required("Email is required"),
   password: yup.string().required("Password is required"),
   location: yup.string().required("Location is required"),
@@ -54,13 +55,15 @@ const Form = () => {
   const isRegister = pageType === "register";
 
   const register = async (values, onSubmitProps) => {
+    // this allows us to send form info with image
     const formData = new FormData();
     for (let value in values) {
       formData.append(value, values[value]);
     }
     formData.append("picturePath", values.picture.name);
+
     const savedUserResponse = await fetch(
-      "http://localhost:3001/api/users/register",
+      "http://localhost:3001/auth/register",
       {
         method: "POST",
         body: formData,
@@ -68,15 +71,15 @@ const Form = () => {
     );
     const savedUser = await savedUserResponse.json();
     onSubmitProps.resetForm();
-
-    if (savedUser){
-        setPageType("login");
+      console.log(formData)
+    if (savedUser) {
+      setPageType("login");
     }
   };
 
   const login = async (values, onSubmitProps) => {
     const loggedInResponse = await fetch(
-      "http://localhost:3001/api/users/login",
+      "http://localhost:3001/auth/login",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -86,13 +89,15 @@ const Form = () => {
     const loggedIn = await loggedInResponse.json();
     onSubmitProps.resetForm();
     if (loggedIn) {
-      dispatch(setLogin({
-        user: loggedIn.user, 
-        token: loggedIn.token,
-        }));
+      dispatch(
+        setLogin({
+          user: loggedIn.user,
+          token: loggedIn.token,
+        })
+      );
       navigate("/home");
     }
-  }
+  };
 
   const handleFormSubmit = async (values, onSubmitProps) => {
     if (isLogin) await login(values, onSubmitProps);
@@ -115,7 +120,7 @@ const Form = () => {
         setFieldValue,
         resetForm,
       }) => (
-        <form onSubmit={handleSubmit}>
+        <form id='user-auth-form' onSubmit={handleSubmit}>
           <Box
             display="grid"
             gap="30px"
@@ -149,6 +154,16 @@ const Form = () => {
                   sx={{ gridColumn: "span 2" }}
                 />
                 <TextField
+                  label="Username"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.username}
+                  name="username"
+                  error={Boolean(touched.username) && Boolean(errors.username)}
+                  helperText={touched.username && errors.username}
+                  sx={{ gridColumn: "span 4" }}
+                />
+                <TextField
                   label="Location"
                   onBlur={handleBlur}
                   onChange={handleChange}
@@ -158,16 +173,7 @@ const Form = () => {
                   helperText={touched.location && errors.location}
                   sx={{ gridColumn: "span 4" }}
                 />
-                <TextField
-                  label="Email"
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={values.email}
-                  name="email"
-                  error={Boolean(touched.email) && Boolean(errors.email)}
-                  helperText={touched.email && errors.email}
-                  sx={{ gridColumn: "span 4" }}
-                />
+
                 <Box
                   gridColumn="span 4"
                   border={`1px solid ${palette.neutral.medium}`}
@@ -213,6 +219,7 @@ const Form = () => {
             />
             <TextField
               label="Password"
+              type= "password"
               onBlur={handleBlur}
               onChange={handleChange}
               value={values.password}

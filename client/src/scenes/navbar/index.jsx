@@ -52,7 +52,7 @@ const NavBar = () => {
           onClick={() => navigate("/home")}
           sx={{ "&:hover": { color: primaryLight, cursor: "pointer" } }}
         >
-          Swocial Network
+          Swolecial Network
         </Typography>
         {isNonMobileScreens && (
           <FlexBetween
