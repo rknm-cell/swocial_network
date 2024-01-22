@@ -34,6 +34,7 @@ const loginSchema = yup.object().shape({
 const initialValuesRegister = {
   firstName: "",
   lastName: "",
+  userName: "",
   email: "",
   password: "",
   location: "",
@@ -157,10 +158,10 @@ const Form = () => {
                   label="Username"
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  value={values.username}
-                  name="username"
-                  error={Boolean(touched.username) && Boolean(errors.username)}
-                  helperText={touched.username && errors.username}
+                  value={values.userName}
+                  name="userName"
+                  error={Boolean(touched.userName) && Boolean(errors.userName)}
+                  helperText={touched.userName && errors.userName}
                   sx={{ gridColumn: "span 4" }}
                 />
                 <TextField
