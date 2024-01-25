@@ -6,22 +6,23 @@ import {
 } from "@mui/icons-material";
 import { Box, Divider, IconButton, Typography, useTheme } from "@mui/material";
 import FlexBetween from "components/FlexBetween";
-import Friend from "copmponents/Friend";
+import Friend from "components/Friend";
 import WidgetWrapper from "components/WidgetWrapper";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setPost } from "state";
 
-const PostWidget = (
+const PostWidget = ({
   postId,
   postUserId,
   userName,
   description,
   location,
   picturePath,
+  userPicturePath,
   likes,
-  comments
-) => {
+  comments,
+}) => {
   const [isComments, setIsComments] = useState(false);
   const dispatch = useDispatch();
   const token = useSelector((state) => state.token);
@@ -31,7 +32,7 @@ const PostWidget = (
 
   const { palette } = useTheme();
   const main = palette.neutral.main;
-  const medium = palette.primary.medium;
+  const primary = palette.primary.main;
 
   const patchLike = async () => {
     const response = await fetch(`http://localhost:3001/posts/${postId}/like`, {
@@ -43,15 +44,18 @@ const PostWidget = (
       body: JSON.stringify({ userId: loggedInUserId }),
     });
     const updatedPost = await response.json();
-    dispatch(setPost(updatedPost));
+    dispatch(setPost({post: updatedPost}));
   };
+  console.log(postUserId);
+  console.log(picturePath);
+  console.log(comments);
   return (
     <WidgetWrapper>
       <Friend
         friendId={postUserId}
         name={userName}
         subtitle={location}
-        userPicturePath={picturePath}
+        userPicturePath={userPicturePath}
       />
       <Typography color={main} sx={{ mt: "1rem" }}>
         {description}
@@ -87,7 +91,19 @@ const PostWidget = (
           <ShareOutlined />
         </IconButton>
       </FlexBetween>
-      
+      {isComments && (
+        <Box mt="0.5rem">
+          {comments.map((comment, i) => {
+            <Box key={`${userName}-${i}`}>
+              <Divider />
+              <Typography sx={{ color: main, m: "0.5rem 0", pl: "1rem" }}>
+                {comment}
+              </Typography>
+            </Box>;
+          })}
+          <Divider />
+        </Box>
+      )}
     </WidgetWrapper>
   );
 };
