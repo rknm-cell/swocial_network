@@ -13,26 +13,19 @@ const UserSchema = new mongoose.Schema({
     min: 2,
     max: 50,
   },
-  displayName: {
+  
+  userName: {
     type: String,
-    min: 2,
-    max: 50,
-  },
-  user_name: {
-    type: String,
-    required: true,
-    unique: true,
   },
   email: {
     type: String,
     required: true,
-    unique: true,
   },
   password: {
     type: String,
     required: true,
   },
-  picture: {
+  picturePath: {
     type: String,
     default: "",
   },
