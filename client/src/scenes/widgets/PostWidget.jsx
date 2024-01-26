@@ -33,7 +33,7 @@ const PostWidget = ({
   const { palette } = useTheme();
   const main = palette.neutral.main;
   const primary = palette.primary.main;
-
+  
   const patchLike = async () => {
     const response = await fetch(`http://localhost:3001/posts/${postId}/like`, {
       method: "PATCH",
@@ -44,13 +44,13 @@ const PostWidget = ({
       body: JSON.stringify({ userId: loggedInUserId }),
     });
     const updatedPost = await response.json();
-    dispatch(setPost({post: updatedPost}));
+    dispatch(setPost({ post: updatedPost }));
   };
   console.log(postUserId);
   console.log(picturePath);
   console.log(comments);
   return (
-    <WidgetWrapper>
+    <WidgetWrapper m="2rem 0">
       <Friend
         friendId={postUserId}
         name={userName}
@@ -66,7 +66,7 @@ const PostWidget = ({
           height="auto"
           alt="post"
           style={{ borderRadius: "0.75rem", marginTop: "0.75rem" }}
-          stylesrc={`http://localhost:3001/assests/${picturePath}`}
+          src={`http://localhost:3001/assets/${picturePath}`}
         />
       )}
       <FlexBetween mt="0.25rem">
@@ -79,28 +79,31 @@ const PostWidget = ({
                 <FavoriteBorderOutlined />
               )}
             </IconButton>
+            <Typography>{likeCount}</Typography>
           </FlexBetween>
+
           <FlexBetween gap="0.3rem">
             <IconButton onClick={() => setIsComments(!isComments)}>
               <ChatBubbleOutlineOutlined />
-              <Typography>{comments.length}</Typography>
             </IconButton>
+            <Typography>{comments.length}</Typography>
           </FlexBetween>
         </FlexBetween>
+
         <IconButton>
           <ShareOutlined />
         </IconButton>
       </FlexBetween>
       {isComments && (
         <Box mt="0.5rem">
-          {comments.map((comment, i) => {
+          {comments.map((comment, i) => (
             <Box key={`${userName}-${i}`}>
               <Divider />
               <Typography sx={{ color: main, m: "0.5rem 0", pl: "1rem" }}>
-                {comment}
+                {userName}: {comment}
               </Typography>
-            </Box>;
-          })}
+            </Box>
+          ))}
           <Divider />
         </Box>
       )}
