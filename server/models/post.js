@@ -23,7 +23,18 @@ const postSchema = mongoose.Schema(
       of: Boolean,
     },
     comments: {
-      type: Array,
+      type: [
+        {
+          userId: {
+            type: String,
+            required: true,
+          },
+          comment: {
+            type: String,
+            required: true,
+          },
+        },
+      ],
       default: [],
     },
   },

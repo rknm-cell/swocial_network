@@ -1,14 +1,10 @@
-import {
-  Person,
-  PersonAddOutlined,
-  PersonRemoveOutlined,
-} from "@mui/icons-material";
+import { PersonAddOutlined, PersonRemoveOutlined } from "@mui/icons-material";
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
-import { useDispatch, useSelect, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { setFriends } from "state";
 import FlexBetween from "./FlexBetween";
 import UserImage from "./UserImage";
-import { useNavigate } from "react-router-dom";
 
 const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
   const dispatch = useDispatch();
@@ -23,10 +19,11 @@ const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
   const main = palette.neutral.main;
   const medium = palette.neutral.medium;
 
-  const isFriend = friends.find((friend) => friend._id === friendId);
-  console.log(_id);
-  console.log(friendId);
-
+  // const isFriend = friends && Array.isArray(friends) && friends.find((friend) => friend._id === friendId);
+  const isFriend =
+    friends.length > 0
+      ? friends.find((friend) => friend._id === friendId)
+      : false;
   const patchFriend = async () => {
     const response = await fetch(
       `http://localhost:3001/users/${_id}/${friendId}`,
@@ -39,7 +36,6 @@ const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
       }
     );
     const data = await response.json();
-    console.log(data);
     dispatch(setFriends({ friends: data }));
   };
 
@@ -54,9 +50,15 @@ const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
           }}
         >
           <Typography
+            color={main}
             variant="h5"
             fontWeight="500"
-            sx={{ "&:hover": { color: primaryLight, cursor: "pointer" } }}
+            sx={{
+              "&:hover": {
+                color: palette.primary.light,
+                cursor: "pointer",
+              },
+            }}
           >
             {name}
           </Typography>

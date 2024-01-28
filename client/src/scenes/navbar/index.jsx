@@ -40,7 +40,7 @@ const NavBar = () => {
   const alt = theme.palette.background.alt;
 
   // const fullName = `${user.firstName} ${user.lastName}`;
-  const fullName = "Default User"
+  const fullName = user.userName;
 
   return (
     <FlexBetween padding="1rem 6%" backgroundColor={alt}>
@@ -72,16 +72,14 @@ const NavBar = () => {
       {isNonMobileScreens ? (
         <FlexBetween gap="2rem">
           {" "}
-          <IconButton onClick={() => dispatch(setMode())}>
+          <IconButton gap="1rem" onClick={() => dispatch(setMode())}>
             {theme.palette.mode === "dark" ? (
               <DarkMode sx={{ fontSize: "25px" }} />
             ) : (
               <LightMode sx={{ color: dark, fontSize: "25px" }} />
             )}
           </IconButton>
-          <Message sx={{ fontSize: "25px" }} />
-          <Notifications sx={{ fontSize: "25px" }} />
-          <Help sx={{ fontSize: "25px" }} />
+          
           <FormControl variant="standard">
             <Select
               value={fullName}

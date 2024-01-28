@@ -59,19 +59,19 @@ try {
 //     console.log('collection dropped');
 // });
 
-  // try {
-  //   await User.deleteMany({});
-  //   await User.insertMany(users);
-  // } catch (err) {
-  //   console.log(err);
-  // }
-  
-  try {
-    await Post.deleteMany({});
-    await Post.insertMany(posts);
-  } catch (err) {
-    console.log(err);
-  }
+//   try {
+//     await User.deleteMany({});
+//     await User.insertMany(users);
+//   } catch (err) {
+//     console.log(err);
+//   }
+//   try {
+//     await Post.deleteMany({});
+//     await Post.insertMany(posts);
+//   } catch (err) {
+//     console.log(err);
+//   }
+
 } catch (error) {
   console.error(error.message);
 }
