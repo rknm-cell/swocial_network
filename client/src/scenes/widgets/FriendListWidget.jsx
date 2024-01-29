@@ -5,33 +5,44 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setFriends } from "state";
 
-const FriendListWidget = ({ userId }) => {
-  // const [loading, setLoading] = useState(true);
+const FriendListWidget = ({ userId, friends }) => {
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const { palette } = useTheme();
   const token = useSelector((state) => state.token);
-  const friends = useSelector((state) => state.user.friends);
-  console.log(typeof friends);
+  // const friends = useSelector((state) => state.user.friends);
+  console.log(token)
+  console.log(userId)
   const getFriends = async () => {
-    const response = await fetch(
-      `http://localhost:3001/users/${userId}/friends`,
-      {
-        method: "GET",
-        headers: { Authorization: `Bearer ${token}` },
+    setLoading(true);
+    try {
+      const response = await fetch(
+        `http://localhost:3001/users/${userId}/friends`,
+        {
+          method: "GET",
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-    );
-    const data = await response.json();
-dispatch(setFriends({ friends: Array.isArray(data) ? data : [] }));
+  
+      const data = await response.json();
+      dispatch(setFriends({ friends: data }));
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
   
 console.log(friends)
   useEffect(() => {
     getFriends();
     
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-  // if (loading) {
-  //   return <div>Loading...</div>; // Or your custom loading component
-  // }
+  }, [userId]); // eslint-disable-line react-hooks/exhaustive-deps
+  
   return (
     <WidgetWrapper>
       <Typography
@@ -43,15 +54,21 @@ console.log(friends)
         Friend List
       </Typography>
       <Box display="flex" flexDirection="column" gap="1.5rem">
-        Friend's List
-        {friends && Array.isArray(friends) && friends.map((friend) => (
-          <Friend
-            key={friend._id}
-            friendId={friend._id}
-            name={`${friend.userName}`}
-            userPicturePath={friend.picturePath}
-          />
-        ))}
+      {loading ? (
+          <Typography>isLoading</Typography> // replace with your spinner component
+        ) : (
+          <>
+            Friend's List
+            {friends && friends.map((friend) => (
+              <Friend
+                key={friend._id}
+                friendId={friend._id}
+                name={`${friend.firstName}`}
+                userPicturePath={friend.picturePath}
+              />
+            ))}
+          </>
+        )}
       </Box>
     </WidgetWrapper>
   );

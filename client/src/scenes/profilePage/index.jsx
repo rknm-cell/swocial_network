@@ -15,6 +15,7 @@ const ProfilePage = () => {
   const {userId} = useParams()
   const token = useSelector((state) => state.token)
   const isNonMobile = useMediaQuery("(min-width: 1000px)");
+  
   const getUser = async () => {
     const response = await fetch(`http://localhost:3001/users/${userId}`, {
     method: "GET",
@@ -22,6 +23,7 @@ const ProfilePage = () => {
   })
   const data = await response.json();
   setUser(data)
+  console.log(user)
   }
 
   useEffect(() => {
@@ -43,7 +45,7 @@ const ProfilePage = () => {
       justifyContent="center"
     >
       <Box flexBasis={isNonMobile ? "26%" : undefined}>
-        <UserWidget userId={userId} picturePath={user.picturePath} />
+        <UserWidget user={user} picturePath={user.picturePath} />
         <Box m="2rem 0"/>
         <FriendListWidget userId={userId}/>
       </Box>

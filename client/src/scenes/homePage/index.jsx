@@ -5,11 +5,28 @@ import UserWidget from "scenes/widgets/UserWidget";
 import MyPostWidget from "scenes/widgets/MyPostWidget";
 import PostsWidget from "scenes/widgets/PostsWidget";
 import FriendListWidget from "scenes/widgets/FriendListWidget";
+import { useEffect, useState } from "react";
 
 const HomePage = () => {
   const isNonMobile = useMediaQuery("(min-width: 1000px)");
   const { _id, picturePath } = useSelector((state) => state.user);
-  
+  const [user, setUser] = useState({});
+  const token = useSelector((state) => state.token);
+
+  const getUser = async () => {
+    const response = await fetch(`http://localhost:3001/users/${_id}`, {
+      method: "GET",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const data = await response.json();
+    setUser(data);
+    console.log(data);
+  };
+
+  useEffect(() => {
+    getUser();
+    console.log(user)
+  }, []);
   return (
     <Box>
       <NavBar />
@@ -23,16 +40,16 @@ const HomePage = () => {
         justifyContent="space-between"
       >
         <Box flexBasis={isNonMobile ? "26%" : undefined}>
-          <UserWidget userId={_id} picturePath={picturePath} />
+          <UserWidget user={user} picturePath={user.picturePath} />
         </Box>
           <Box flexBasis = {isNonMobile ? "42%" : undefined}
           mt={isNonMobile ? undefined : "2rem"}
           >
             <MyPostWidget picturePath={picturePath}/>
-            <PostsWidget userId={_id}/>
+            <PostsWidget userId={user._id}/>
           </Box>
     {isNonMobile && <Box flexBasis="26%" mt="2rem">
-      <FriendListWidget userId={_id}/>
+      <FriendListWidget userId={user._id} friends={user.friends}/>
       </Box>}
       </Box>
     </Box>

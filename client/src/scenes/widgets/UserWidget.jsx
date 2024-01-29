@@ -13,28 +13,28 @@ import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const UserWidget = ({ userId, picturePath }) => {
-  const [user, setUser] = useState({});
+const UserWidget = ({ user, picturePath }) => {
+  // const [user, setUser] = useState({});
   const { palette } = useTheme();
   const navigate = useNavigate();
-  const token = useSelector((state) => state.token);
+  // const token = useSelector((state) => state.token);
   const dark = palette.neutral.dark;
   const medium = palette.neutral.medium;
   const main = palette.neutral.main;
 
-  const getUser = async () => {
-    const response = await fetch(`http://localhost:3001/users/${userId}`, {
-      method: "GET",
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    const data = await response.json();
-    setUser(data);
-    console.log(data);
-  };
+  // const getUser = async () => {
+  //   const response = await fetch(`http://localhost:3001/users/${userId}`, {
+  //     method: "GET",
+  //     headers: { Authorization: `Bearer ${token}` },
+  //   });
+  //   const data = await response.json();
+  //   setUser(data);
+  //   console.log(data);
+  // };
 
-  useEffect(() => {
-    getUser();
-  }, []);
+  // useEffect(() => {
+  //   getUser();
+  // }, []);
 
   if (!user) {
     return null;
@@ -47,7 +47,7 @@ const UserWidget = ({ userId, picturePath }) => {
       <FlexBetween
         gap="0.5rem"
         pb="1.1rem"
-        onClick={() => navigate(`/profile/${userId}`)}
+        onClick={() => navigate(`/profile/${user._id}`)}
       >
         <FlexBetween gap="1rem">
           <UserImage image={picturePath} />
